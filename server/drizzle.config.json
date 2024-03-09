@@ -1,0 +1,4 @@
+{
+	"schema": "./src/db/schemas/*",
+	"out": "./src/db/migrations"
+}
