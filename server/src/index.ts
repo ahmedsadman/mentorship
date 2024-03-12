@@ -6,12 +6,12 @@ const app = new Hono();
 app.post("/user", async (c) => {
 	const { name, email } = await c.req.json();
 	const newUser = await UserRepo.create({ name, email });
-	return c.json(newUser);
+	return c.json(newUser, 201);
 });
 
 app.onError((err, c) => {
 	console.log(err);
-	return c.json(err);
+	return c.json(err, 500);
 });
 
 export default app;

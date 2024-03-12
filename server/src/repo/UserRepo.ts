@@ -1,5 +1,5 @@
-import { user as userTable } from "../db/schemas/user";
 import { db } from "../db";
+import { user as userTable } from "../db/schemas/user";
 
 // TODO: Move to common place
 type NewUser = typeof userTable.$inferInsert;
