@@ -8,6 +8,13 @@
       "when": 1709977535890,
       "tag": "0000_famous_lucky_pierre",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710256685091,
+      "tag": "0001_motionless_sunspot",
+      "breakpoints": true
     }
   ]
 }

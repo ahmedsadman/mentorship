@@ -6,11 +6,11 @@ type NewUser = typeof userTable.$inferInsert;
 
 class UserRepo {
 	public static async create(user: NewUser) {
-		const { id, name, email } = userTable;
+		const { id, name, email, createdAt } = userTable;
 		const result = await db
 			.insert(userTable)
 			.values(user)
-			.returning({ id, name, email });
+			.returning({ id, name, email, createdAt });
 		return result[0];
 	}
 }
