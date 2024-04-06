@@ -1,5 +1,4 @@
-import { afterAll, beforeAll, describe } from "bun:test";
-import { sql } from "drizzle-orm";
+import { afterAll, beforeAll } from "bun:test";
 import { db } from "./db";
 import { runMigration } from "./db/migrator/migrateFunc";
 import { user } from "./db/schemas/user";
