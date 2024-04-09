@@ -1,62 +1,62 @@
 {
-	"id": "4819c202-92ef-4264-a2b3-fba408738614",
-	"prevId": "00000000-0000-0000-0000-000000000000",
-	"version": "5",
-	"dialect": "pg",
-	"tables": {
-		"user": {
-			"name": "user",
-			"schema": "",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "serial",
-					"primaryKey": true,
-					"notNull": true
-				},
-				"name": {
-					"name": "name",
-					"type": "varchar(256)",
-					"primaryKey": false,
-					"notNull": false
-				},
-				"email": {
-					"name": "email",
-					"type": "varchar(256)",
-					"primaryKey": false,
-					"notNull": true
-				},
-				"password": {
-					"name": "password",
-					"type": "varchar(256)",
-					"primaryKey": false,
-					"notNull": false
-				},
-				"is_admin": {
-					"name": "is_admin",
-					"type": "boolean",
-					"primaryKey": false,
-					"notNull": false,
-					"default": false
-				}
-			},
-			"indexes": {},
-			"foreignKeys": {},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {
-				"user_email_unique": {
-					"name": "user_email_unique",
-					"nullsNotDistinct": false,
-					"columns": ["email"]
-				}
-			}
-		}
-	},
-	"enums": {},
-	"schemas": {},
-	"_meta": {
-		"columns": {},
-		"schemas": {},
-		"tables": {}
-	}
+  "id": "4819c202-92ef-4264-a2b3-fba408738614",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_admin": {
+          "name": "is_admin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": ["email"]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
 }
