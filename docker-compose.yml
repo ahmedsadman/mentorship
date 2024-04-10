@@ -7,8 +7,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mentorship-dev
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
 
