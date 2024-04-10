@@ -5,6 +5,7 @@ WORKDIR /code
 COPY bun.lockb .
 COPY package.json .
 
+RUN apt update && apt install -y netcat
 RUN bun install --frozen-lockfile
 
 COPY . .
