@@ -11,4 +11,7 @@ COPY . .
 
 EXPOSE 3000/tcp
 
-ENTRYPOINT ["bun", "run", "src/index.ts"]
+RUN chmod +x runner.sh
+RUN chmod +x scripts.sh
+
+ENTRYPOINT ["./runner.sh"]
