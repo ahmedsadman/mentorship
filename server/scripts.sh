@@ -15,6 +15,14 @@ build_push() {
   docker_push
 }
 
+test() {
+  while ! nc -z "$DB_HOST" "$DB_PORT"; do
+    echo "Waiting for DB to be available..."
+    sleep 2
+  done
+  bun run test
+}
+
 main() {
     # Check if a function name was provided as an argument
     if [ $# -eq 0 ]; then

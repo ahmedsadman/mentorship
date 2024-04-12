@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  db:
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mentorship-dev-test
+
+  server:
+    restart: none
+    entrypoint: "./scripts.sh test"
