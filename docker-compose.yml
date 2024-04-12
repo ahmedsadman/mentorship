@@ -20,7 +20,6 @@ services:
     environment:
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_URL=postgresql://postgres:password@db:5432/mentorship-dev
     ports:
       - '3000:3000'
 

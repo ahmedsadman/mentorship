@@ -5,7 +5,7 @@
     "db::generate": "drizzle-kit generate:pg",
     "db::migrate": "bun run ./src/db/migrator/migrate.ts",
     "lint": "biome check --apply .",
-    "test": "NODE_ENV=test bun test --preload=./src/testSetup.ts"
+    "test": "DB_NAME=mentorship-dev-test bun test --preload=./src/testSetup.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.30.1",
