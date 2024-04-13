@@ -1,4 +1,4 @@
-name: PR Status
+name: PR Status (Server)
 
 on:
   pull_request:
@@ -13,7 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
+
       - name: Run Tests
-        run: echo Hello World
+        run: |
+          echo --- Running Test Suite ---
+          ./scripts.sh test_server
+          echo --- Test Suite Complete ---
