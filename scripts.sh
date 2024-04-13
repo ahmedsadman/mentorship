@@ -11,6 +11,7 @@ local_down() {
 test_server() {
     cd server && docker-compose -f docker-compose.yml -f docker-compose.test.yml up --build --exit-code-from server
     cd ../
+    echo "hi"
 }
 
 main() {
