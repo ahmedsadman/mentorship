@@ -21,6 +21,7 @@ test() {
     sleep 2
   done
   bun run test
+  echo O lala
 }
 
 main() {
