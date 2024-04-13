@@ -7,5 +7,5 @@ done
 
 echo "Starting server..."
 bun run db::migrate
-echo Done...
+echo Done...Test PR
 bun run src/index.ts
