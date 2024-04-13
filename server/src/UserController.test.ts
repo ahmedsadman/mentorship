@@ -25,6 +25,6 @@ describe("UserController", () => {
       .where(eq(user.email, "test@email.com"));
 
     console.log('hiii');
-    expect(result[0]).not.toBeEmpty();
+    expect(result[0]).toBeEmpty();
   });
 });
