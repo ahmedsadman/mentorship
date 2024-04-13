@@ -7,5 +7,5 @@ services:
       - POSTGRES_DB=mentorship-dev-test
 
   server:
-    restart: none
+    restart: "no"
     entrypoint: "./scripts.sh test"
