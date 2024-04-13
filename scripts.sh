@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 local_up() {
     docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 }
@@ -10,8 +8,9 @@ local_down() {
     docker-compose -f docker-compose.yml -f docker-compose.override.yml down
 }
 
-test() {
-    docker-compose -f docker-compose.yml -f docker-compose.test.yml up --build --exit-code-from server
+test_server() {
+    cd server && docker-compose -f docker-compose.yml -f docker-compose.test.yml up --build --exit-code-from server
+    cd ../
 }
 
 main() {
