@@ -10,7 +10,7 @@ const {
 } = process.env;
 
 export const url = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
-console.log('DB: ', url);
+console.log('DBs: ', url);
 const queryClient = postgres(url);
 const db = drizzle(queryClient);
 
