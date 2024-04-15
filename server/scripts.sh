@@ -15,6 +15,11 @@ build_push() {
   docker_push
 }
 
+lint() {
+  echo Running Lint
+  bun run lint-nofix
+}
+
 test() {
   while ! nc -z "$DB_HOST" "$DB_PORT"; do
     echo "Waiting for DB to be available..."

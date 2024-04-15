@@ -15,6 +15,11 @@ test_server() {
     cd ../
 }
 
+lint_server() {
+    cd server && docker build -t lint-image . && docker run --entrypoint "./scripts.sh" --rm lint-image lint
+    cd ../
+}
+
 main() {
     # Check if a function name was provided as an argument
     if [ $# -eq 0 ]; then

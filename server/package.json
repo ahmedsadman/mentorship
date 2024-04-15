@@ -5,6 +5,7 @@
     "db::generate": "drizzle-kit generate:pg",
     "db::migrate": "bun run ./src/db/migrator/migrate.ts",
     "lint": "biome check --apply .",
+    "lint-nofix": "biome check .",
     "test": "DB_NAME=mentorship-dev-test bun test --preload=./src/testSetup.ts"
   },
   "dependencies": {

@@ -8,8 +8,21 @@ on:
       - master
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Lint
+        run: ./scripts.sh lint_server
+
+
   test:
     name: Run Tests
+    needs: lint
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +30,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Tests
-        run: |
-          echo --- Running Test Suite ---
-          ./scripts.sh test_server
-          echo --- Test Suite Complete ---
+        run: ./scripts.sh test_server
