@@ -5,7 +5,7 @@ import { user as userTable } from "../db/schemas/user";
 type NewUser = typeof userTable.$inferInsert;
 
 class UserRepo {
-  public static async create(user: NewUser) {
+  public async create(user: NewUser) {
     const { id, name, email, createdAt } = userTable;
     const result = await db
       .insert(userTable)
@@ -15,4 +15,4 @@ class UserRepo {
   }
 }
 
-export default UserRepo;
+export default new UserRepo();

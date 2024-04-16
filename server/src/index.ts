@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import UserRepo from "./repo/UserRepo";
+import userRepo from "./repo/UserRepo";
 
 const app = new Hono();
 
@@ -9,7 +9,7 @@ app.get("/ping", (c) => {
 
 app.post("/user", async (c) => {
   const { name, email } = await c.req.json();
-  const newUser = await UserRepo.create({ name, email });
+  const newUser = await userRepo.create({ name, email });
   return c.json(newUser, 201);
 });
 
