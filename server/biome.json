@@ -7,9 +7,6 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "complexity": {
-        "noStaticOnlyClass": "off"
-      },
       "correctness": {
         "noUnusedImports": "error"
       }
