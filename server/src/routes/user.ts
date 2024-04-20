@@ -1,5 +1,5 @@
+import userService from "@app/service/UserService";
 import { Hono } from "hono";
-import userService from "../service/UserService";
 
 const userApp = new Hono();
 

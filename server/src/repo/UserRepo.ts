@@ -1,6 +1,6 @@
-import { db } from "../db";
-import { user as userTable } from "../db/schemas/user";
-import type { NewUser } from "../types";
+import { db } from "@app/db";
+import { user as userTable } from "@app/db/schemas/user";
+import type { NewUser } from "@app/types";
 
 class UserRepo {
   public async create(user: NewUser) {
