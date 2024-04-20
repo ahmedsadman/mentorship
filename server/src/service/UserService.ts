@@ -1,7 +1,7 @@
 import type { NewUser } from "@app/db/types";
 import UserRepo from "@app/repo/UserRepo";
 
-class UserService {
+export class UserService {
   public async createUser(user: NewUser) {
     return UserRepo.create(user);
   }
