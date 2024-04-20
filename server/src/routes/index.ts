@@ -1,3 +1,4 @@
+import menteeApp from "./mentee";
 import userApp from "./user";
 
-export { userApp };
+export { userApp, menteeApp };

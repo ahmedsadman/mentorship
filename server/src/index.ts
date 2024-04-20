@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { userApp } from "./routes";
+import { menteeApp, userApp } from "./routes";
 
 const app = new Hono();
 
@@ -8,6 +8,7 @@ app.get("/ping", (c) => {
 });
 
 app.route("/user", userApp);
+app.route("/mentee", menteeApp);
 
 app.onError((err, c) => {
   console.log(err);
