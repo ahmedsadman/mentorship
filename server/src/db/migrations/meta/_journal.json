@@ -15,6 +15,13 @@
       "when": 1710256685091,
       "tag": "0001_motionless_sunspot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1713607035460,
+      "tag": "0002_true_swarm",
+      "breakpoints": true
     }
   ]
 }
