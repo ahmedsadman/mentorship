@@ -1,8 +1,6 @@
 import { db } from "../db";
 import { user as userTable } from "../db/schemas/user";
-
-// TODO: Move to common place
-type NewUser = typeof userTable.$inferInsert;
+import type { NewUser } from "../types";
 
 class UserRepo {
   public async create(user: NewUser) {
