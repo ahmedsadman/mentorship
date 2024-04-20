@@ -1,10 +1,9 @@
 import { describe, expect, test } from "bun:test";
+import { db } from "@app/db";
+import { user } from "@app/db/schemas/user";
+import app from "@app/index";
 import { eq } from "drizzle-orm";
-import { db } from "../../db";
-import { user } from "../../db/schemas/user";
-import app from "../../index";
 
-// Placeholder test. Later move inside controller
 describe("/user", () => {
   test("POST /user", async () => {
     const bodyData = {
