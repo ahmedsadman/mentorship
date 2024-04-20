@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import userRepo from "./repo/UserRepo";
+import { userApp } from "./routes";
 
 const app = new Hono();
 
@@ -7,11 +7,7 @@ app.get("/ping", (c) => {
   return c.text("pong");
 });
 
-app.post("/user", async (c) => {
-  const { name, email } = await c.req.json();
-  const newUser = await userRepo.create({ name, email });
-  return c.json(newUser, 201);
-});
+app.route("/user", userApp);
 
 app.onError((err, c) => {
   console.log(err);

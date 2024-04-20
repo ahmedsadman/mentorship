@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { eq } from "drizzle-orm";
-import { db } from "./db";
-import { user } from "./db/schemas/user";
-import app from "./index";
+import { db } from "../../db";
+import { user } from "../../db/schemas/user";
+import app from "../../index";
 
 // Placeholder test. Later move inside controller
-describe("UserController", () => {
+describe("/user", () => {
   test("POST /user", async () => {
     const bodyData = {
       name: "Test",
