@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 docker_build() {
@@ -13,6 +12,14 @@ docker_push() {
 build_push() {
   docker_build
   docker_push
+}
+
+dev_start() {
+  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
+}
+
+dev_down() {
+  docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
 }
 
 lint() {
