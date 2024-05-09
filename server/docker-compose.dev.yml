@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  server:
+    volumes:
+      - /code/node_modules
+      - ./:/code
