@@ -2,6 +2,9 @@ version: '3.8'
 
 services:
   server:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
     volumes:
       - /code/node_modules
       - ./:/code
