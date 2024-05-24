@@ -5,7 +5,14 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mentorship-dev-test
+    ports:
+      - '5433:5432'
 
   server:
     restart: "no"
     entrypoint: "./scripts.sh test"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+    ports:
+      - '3001:3000'
