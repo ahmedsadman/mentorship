@@ -7,5 +7,11 @@ done
 
 echo "Starting server..."
 bun run db::migrate
-echo Done...
-bun run src/index.ts
+echo Migration complete
+
+
+if [ "$NODE_ENV" = "production" ]; then
+    bun run src/index.ts
+else
+    bun run dev
+fi
