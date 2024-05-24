@@ -1,5 +1,6 @@
 import menteeRepo from "@app/repo/MenteeRepo";
-import type { NewMentee, NewUser } from "@app/types";
+import type { NewMentee, NewSession, NewUser } from "@app/types";
+import sessionService from "./SessionService";
 import { UserService } from "./UserService";
 
 type MenteeUser = NewUser & NewMentee;
@@ -18,6 +19,10 @@ class MenteeService extends UserService {
       user: dbUser,
       mentee: dbMentee,
     };
+  }
+
+  public async createSession(session: NewSession) {
+    return sessionService.createSession(session);
   }
 }
 

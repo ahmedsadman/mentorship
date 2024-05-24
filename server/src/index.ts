@@ -12,7 +12,7 @@ app.route("/mentee", menteeApp);
 
 app.onError((err, c) => {
   console.log(err);
-  return c.json(err, 500);
+  return c.json({ err: err.message }, 500);
 });
 
 export default {
