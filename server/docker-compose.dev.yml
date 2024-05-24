@@ -1,6 +1,11 @@
 version: '3.8'
 
 services:
+  db:
+    environment:
+      - POSTGRES_DB=mentorship-dev
+    ports:
+      - '5432:5432'
   server:
     build:
       context: ./
@@ -8,3 +13,8 @@ services:
     volumes:
       - /code/node_modules
       - ./:/code
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+    ports:
+      - '3000:3000'
