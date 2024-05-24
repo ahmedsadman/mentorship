@@ -13,7 +13,6 @@ async function cleanup() {
 }
 
 beforeAll(async () => {
-  await cleanup();
   await runMigration();
 });
 
