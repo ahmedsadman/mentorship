@@ -2,12 +2,14 @@ import { afterEach, beforeAll } from "bun:test";
 import { db } from "./db";
 import { runMigration } from "./db/migrator/migrateFunc";
 import { mentee } from "./db/schemas/mentee";
+import { session } from "./db/schemas/session";
 import { user } from "./db/schemas/user";
 
-function cleanup() {
-  const tables = [mentee, user];
-  const promises = tables.map((table) => db.delete(table));
-  return Promise.all(promises).catch((err) => console.log("err is", err));
+async function cleanup() {
+  const tables = [session, mentee, user];
+  for (const table of tables) {
+    await db.delete(table);
+  }
 }
 
 beforeAll(async () => {
