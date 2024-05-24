@@ -1,0 +1,21 @@
+meta {
+  name: Create Mentee
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseURL}}/mentee
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "test mentee",
+    "email": "gmail11@email.com",
+    "password": "test123",
+    "plan": "pro",
+    "price": 250
+  }
+}
