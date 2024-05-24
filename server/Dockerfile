@@ -1,6 +1,7 @@
 FROM oven/bun:1.1.4-slim
 
 WORKDIR /code
+ENV NODE_ENV=production
 
 COPY bun.lockb .
 COPY package.json .
