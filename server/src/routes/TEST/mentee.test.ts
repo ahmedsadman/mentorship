@@ -5,6 +5,7 @@ import { session } from "@app/db/schemas/session";
 import { user } from "@app/db/schemas/user";
 import app from "@app/index";
 import menteeService from "@app/service/MenteeService";
+import sessionService from "@app/service/SessionService";
 import { eq } from "drizzle-orm";
 
 describe("/mentee", () => {
@@ -92,5 +93,51 @@ describe("/mentee", () => {
 
     expect(res.status).toBe(201);
     expect(await res.json()).toEqual(mockResp);
+  });
+
+  test("GET /mentee/:id/session", async () => {
+    const mentee = await menteeService.createMentee({
+      name: "Test",
+      email: "test22@email.com",
+      password: "123",
+      plan: "lite",
+      price: 100,
+    });
+    const menteeId = mentee.mentee.id;
+
+    const bodyData = [
+      {
+        startTime: "2024-05-24T09:07:30.800Z",
+        endTime: "2024-05-24T09:07:45.800Z",
+      },
+      {
+        startTime: "2024-06-24T09:07:30.800Z",
+        endTime: "2024-06-24T09:07:45.800Z",
+      },
+    ];
+
+    const promises = bodyData.map((data) =>
+      sessionService.createSession({
+        menteeId,
+        startTime: new Date(data.startTime),
+        endTime: new Date(data.endTime),
+      }),
+    );
+
+    const createdSessions = await Promise.all(promises);
+    const expectedResp = createdSessions.map((session) => ({
+      id: session.id,
+      menteeId: session.menteeId,
+      startTime: session.startTime.toISOString(),
+      endTime: session.endTime.toISOString(),
+      status: "pending",
+    }));
+
+    const res = await app.request(`/mentee/${menteeId}/session`, {
+      method: "GET",
+    });
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual(expectedResp);
   });
 });

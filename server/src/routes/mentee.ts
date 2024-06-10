@@ -28,4 +28,10 @@ menteeApp.post("/:id/session", async (c) => {
   return c.json(session, 201);
 });
 
+menteeApp.get("/:id/session", async (c) => {
+  const { id } = c.req.param();
+  const sessions = await sessionService.getMenteeSessions(Number(id));
+  return c.json(sessions, 200);
+});
+
 export default menteeApp;
