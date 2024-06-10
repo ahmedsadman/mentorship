@@ -1,14 +1,28 @@
-import { describe, expect, test } from "bun:test";
+import { beforeEach, describe, expect, test } from "bun:test";
 import { db } from "@app/db";
 import { mentee } from "@app/db/schemas/mentee";
 import { session } from "@app/db/schemas/session";
 import { user } from "@app/db/schemas/user";
 import app from "@app/index";
-import menteeService from "@app/service/MenteeService";
+import menteeService, {
+  type MenteeCreateResponse,
+} from "@app/service/MenteeService";
 import sessionService from "@app/service/SessionService";
 import { eq } from "drizzle-orm";
 
 describe("/mentee", () => {
+  let mockMentee: MenteeCreateResponse;
+
+  beforeEach(async () => {
+    mockMentee = await menteeService.createMentee({
+      name: "Test",
+      email: "test@email.com",
+      password: "123",
+      plan: "lite",
+      price: 100,
+    });
+  });
+
   test("POST /mentee", async () => {
     const bodyData = {
       name: "Test",
@@ -57,14 +71,7 @@ describe("/mentee", () => {
   });
 
   test("POST /mentee/:id/session", async () => {
-    const mentee = await menteeService.createMentee({
-      name: "Test",
-      email: "test@email.com",
-      password: "123",
-      plan: "lite",
-      price: 100,
-    });
-    const menteeId = mentee.mentee.id;
+    const menteeId = mockMentee.mentee.id;
 
     const bodyData = {
       startTime: "2024-05-24T09:07:30.800Z",
@@ -96,14 +103,7 @@ describe("/mentee", () => {
   });
 
   test("GET /mentee/:id/session", async () => {
-    const mentee = await menteeService.createMentee({
-      name: "Test",
-      email: "test22@email.com",
-      password: "123",
-      plan: "lite",
-      price: 100,
-    });
-    const menteeId = mentee.mentee.id;
+    const menteeId = mockMentee.mentee.id;
 
     const bodyData = [
       {

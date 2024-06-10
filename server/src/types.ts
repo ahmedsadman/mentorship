@@ -5,3 +5,5 @@ import type { user } from "./db/schemas/user";
 export type NewUser = typeof user.$inferInsert;
 export type NewMentee = typeof mentee.$inferInsert;
 export type NewSession = typeof session.$inferInsert;
+
+export type QueryMentee = typeof mentee.$inferSelect;
