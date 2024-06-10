@@ -1,9 +1,15 @@
+import type { QueryUser } from "@app/db/types";
 import menteeRepo from "@app/repo/MenteeRepo";
-import type { NewMentee, NewSession, NewUser } from "@app/types";
+import type { NewMentee, NewSession, NewUser, QueryMentee } from "@app/types";
 import sessionService from "./SessionService";
 import { UserService } from "./UserService";
 
 type MenteeUser = NewUser & NewMentee;
+export type MenteeCreateResponse = {
+  // TODO: Fetch public fields from class
+  user: Pick<QueryUser, "id" | "name" | "email" | "createdAt">;
+  mentee: Pick<QueryMentee, "id" | "plan" | "price" | "active">;
+};
 
 class MenteeService extends UserService {
   public async createMentee(menteeUser: MenteeUser) {
