@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   db:
-    environment:
-      - POSTGRES_DB=mentorship-dev
     ports:
       - '5432:5432'
+    volumes:
+      - ./docker/db_scripts:/docker-entrypoint-initdb.d/
   server:
     build:
       context: ./
