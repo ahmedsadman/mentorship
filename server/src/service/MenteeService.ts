@@ -11,6 +11,24 @@ export type MenteeCreateResponse = {
   mentee: Pick<QueryMentee, "id" | "plan" | "price" | "active">;
 };
 
+// TODO: Find a suitable spot to place such types
+type Attendee = {
+  email: string;
+  name: string;
+  timezone: string;
+  utcOffset: number;
+};
+
+export type WebhookPayload = {
+  triggerEvent: string;
+  createdAt: string;
+  payload: {
+    attendees: Attendee[];
+    startTime: string;
+    endTime: string;
+  };
+};
+
 class MenteeService extends UserService {
   public async createMentee(menteeUser: MenteeUser) {
     const { name, email, password, plan, price } = menteeUser;
@@ -29,6 +47,25 @@ class MenteeService extends UserService {
 
   public async createSession(session: NewSession) {
     return sessionService.createSession(session);
+  }
+
+  public async getByEmail(email: string) {
+    return menteeRepo.getByEmail(email);
+  }
+
+  public async handleWebhookSession(payload: WebhookPayload) {
+    const { email } = payload.payload.attendees[0];
+    const { mentee } = await this.getByEmail(email);
+
+    if (!mentee) {
+      throw new Error("Mentee not found");
+    }
+
+    await this.createSession({
+      menteeId: mentee.id,
+      startTime: new Date(payload.payload.startTime),
+      endTime: new Date(payload.payload.endTime),
+    });
   }
 }
 
