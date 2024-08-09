@@ -29,7 +29,7 @@ lint() {
 
 test() {
   while ! nc -z "$DB_HOST" "$DB_PORT"; do
-    echo "Waiting for DB to be available..."
+    echo "Waiting for DB to be available... (Host=$DB_HOST, Port=$DB_PORT)"
     sleep 2
   done
   bun run test
