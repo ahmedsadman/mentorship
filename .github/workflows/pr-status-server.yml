@@ -29,5 +29,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run Tests
+      - name: Run Testss
         run: ./scripts.sh test_server
