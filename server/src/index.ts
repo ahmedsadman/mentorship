@@ -4,7 +4,7 @@ import { menteeApp, userApp, webhookApp } from "./routes";
 const app = new Hono();
 
 app.get("/ping", (c) => {
-  return c.text("pong");
+  return c.text("pongg");
 });
 
 app.route("/user", userApp);
