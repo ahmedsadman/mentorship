@@ -76,6 +76,7 @@ describe("/mentee", () => {
     const bodyData = {
       startTime: "2024-05-24T09:07:30.800Z",
       endTime: "2024-05-24T09:07:45.800Z",
+      length: 45,
     };
 
     const res = await app.request(`/mentee/${menteeId}/session`, {
@@ -95,7 +96,8 @@ describe("/mentee", () => {
       menteeId,
       startTime: bodyData.startTime,
       endTime: bodyData.endTime,
-      status: "pending",
+      length: 45,
+      status: null,
     };
 
     expect(res.status).toBe(201);
@@ -119,6 +121,7 @@ describe("/mentee", () => {
     const promises = bodyData.map((data) =>
       sessionService.createSession({
         menteeId,
+        length: 30,
         startTime: new Date(data.startTime),
         endTime: new Date(data.endTime),
       }),
@@ -130,7 +133,8 @@ describe("/mentee", () => {
       menteeId: session.menteeId,
       startTime: session.startTime.toISOString(),
       endTime: session.endTime.toISOString(),
-      status: "pending",
+      length: session.length,
+      status: null,
     }));
 
     const res = await app.request(`/mentee/${menteeId}/session`, {
