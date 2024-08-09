@@ -24,6 +24,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          context: ./server/Dockerfile
           tags: ahmedsadman/mentorship-server:latest
 
   deploy:
