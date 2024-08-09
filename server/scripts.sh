@@ -15,11 +15,11 @@ build_push() {
 }
 
 dev_start() {
-  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
+  docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
 }
 
 dev_down() {
-  docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+  docker compose -f docker-compose.yml -f docker-compose.dev.yml down
 }
 
 lint() {
