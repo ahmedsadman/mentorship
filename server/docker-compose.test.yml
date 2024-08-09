@@ -14,5 +14,6 @@ services:
     environment:
       - DB_HOST=db
       - DB_PORT=5432
+      - NODE_ENV=test
     ports:
       - '3001:3000'
