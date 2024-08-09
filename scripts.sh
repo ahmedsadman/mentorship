@@ -3,15 +3,15 @@
 set -e
 
 local_up() {
-    docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+    docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
 }
 
 local_down() {
-    docker-compose -f docker-compose.yml -f docker-compose.override.yml down
+    docker compose -f docker-compose.yml -f docker-compose.override.yml down
 }
 
 test_server() {
-    cd server && docker-compose -p mentorship-server-test -f docker-compose.yml -f docker-compose.test.yml up --build --exit-code-from server
+    cd server && docker compose -p mentorship-server-test -f docker-compose.yml -f docker-compose.test.yml up --build --exit-code-from server
     cd ../
 }
 
