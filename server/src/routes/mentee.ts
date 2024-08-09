@@ -16,13 +16,15 @@ menteeApp.post("/", async (c) => {
   return c.json(newMentee, 201);
 });
 
+// INTERNAL
 menteeApp.post("/:id/session", async (c) => {
-  const { startTime, endTime } = await c.req.json();
+  const { startTime, endTime, length } = await c.req.json();
   const { id } = c.req.param();
   const session = await sessionService.createSession({
     menteeId: Number(id),
     startTime: new Date(startTime),
     endTime: new Date(endTime),
+    length,
   });
 
   return c.json(session, 201);

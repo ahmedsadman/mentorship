@@ -26,6 +26,7 @@ export type WebhookPayload = {
     attendees: Attendee[];
     startTime: string;
     endTime: string;
+    length: number;
   };
 };
 
@@ -63,6 +64,7 @@ class MenteeService extends UserService {
 
     await this.createSession({
       menteeId: mentee.id,
+      length: payload.payload.length,
       startTime: new Date(payload.payload.startTime),
       endTime: new Date(payload.payload.endTime),
     });

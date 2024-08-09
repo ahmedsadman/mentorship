@@ -32,9 +32,11 @@ describe("/webhook", () => {
   });
 
   const createPayload = (email: string) => ({
+    triggerEvent: "BOOKING_CREATED",
     payload: {
       startTime: "2024-06-19T07:43:51.464Z",
       endTime: "2024-06-19T07:50:51.464Z",
+      length: 45,
       attendees: [
         {
           email,
@@ -70,6 +72,7 @@ describe("/webhook", () => {
     expect(dbResult[0].session.endTime).toEqual(
       new Date(bodyData1.payload.endTime),
     );
+    expect(dbResult[0].session.length).toEqual(45);
     expect(dbResult[0].user?.email).toEqual(mockMentee1.user.email);
 
     const res2 = await app.request("/webhook/session", {
@@ -87,6 +90,7 @@ describe("/webhook", () => {
     expect(dbResult2[0].session.endTime).toEqual(
       new Date(bodyData1.payload.endTime),
     );
+    expect(dbResult2[0].session.length).toEqual(45);
     expect(dbResult2[0].user?.email).toEqual(mockMentee2.user.email);
   });
 });
