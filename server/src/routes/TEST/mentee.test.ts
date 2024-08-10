@@ -97,7 +97,7 @@ describe("/mentee", () => {
       startTime: bodyData.startTime,
       endTime: bodyData.endTime,
       length: 45,
-      status: null,
+      status: "accepted",
     };
 
     expect(res.status).toBe(201);
@@ -124,6 +124,7 @@ describe("/mentee", () => {
         length: 30,
         startTime: new Date(data.startTime),
         endTime: new Date(data.endTime),
+        status: "accepted",
       }),
     );
 
@@ -134,7 +135,7 @@ describe("/mentee", () => {
       startTime: session.startTime.toISOString(),
       endTime: session.endTime.toISOString(),
       length: session.length,
-      status: null,
+      status: "accepted",
     }));
 
     const res = await app.request(`/mentee/${menteeId}/session`, {

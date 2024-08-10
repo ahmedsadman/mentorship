@@ -67,6 +67,10 @@ class MenteeService extends UserService {
       length: payload.payload.length,
       startTime: new Date(payload.payload.startTime),
       endTime: new Date(payload.payload.endTime),
+      // For some reason, could not do DB migration of enums to change default to 'accepted'
+      // Getting error, 'unsafe use of new enum value "accepted"'
+      // Could be related to Drizzle-specific issue. Should investigate (low priority)
+      status: "accepted",
     });
   }
 }
