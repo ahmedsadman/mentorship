@@ -14,7 +14,7 @@ export const session = pgTable("session", {
   menteeId: integer("user_id").references(() => mentee.id),
   startTime: timestamp("start_time").notNull(),
   endTime: timestamp("end_time").notNull(),
-  status: statusEnum("status"),
+  status: statusEnum("status").default("accepted"),
   length: integer("length"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

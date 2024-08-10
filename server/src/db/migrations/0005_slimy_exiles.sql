@@ -1,0 +1,1 @@
+ALTER TABLE "session" ALTER COLUMN "status" SET DEFAULT 'accepted';
