@@ -25,6 +25,7 @@ menteeApp.post("/:id/session", async (c) => {
     startTime: new Date(startTime),
     endTime: new Date(endTime),
     length,
+    status: "accepted",
   });
 
   return c.json(session, 201);
