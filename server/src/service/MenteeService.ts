@@ -27,7 +27,7 @@ export type WebhookPayload = {
     startTime: string;
     endTime: string;
     length: number;
-    bookingId: number;
+    bookingId: number | null;
   };
 };
 
