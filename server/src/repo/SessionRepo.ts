@@ -19,6 +19,19 @@ class SessionRepo {
     return result[0];
   }
 
+  public async updateSession(bookingId: number, updatedFields: object) {
+    const updatedSession = await db
+      .update(sessionTable)
+      .set(updatedFields)
+      .where(eq(sessionTable.bookingId, bookingId))
+      .returning({
+        id: sessionTable.id,
+        bookingId: sessionTable.bookingId,
+        status: sessionTable.status,
+      });
+    return updatedSession[0];
+  }
+
   public async getMenteeSessions(_menteeId: number) {
     // TODO: Extract the public fields as class attribute
     const { id, bookingId, menteeId, startTime, endTime, length, status } =
