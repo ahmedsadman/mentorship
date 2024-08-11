@@ -18,7 +18,7 @@ menteeApp.post("/", async (c) => {
 
 // INTERNAL
 menteeApp.post("/:id/session", async (c) => {
-  const { startTime, endTime, length } = await c.req.json();
+  const { startTime, endTime, length, bookingId } = await c.req.json();
   const { id } = c.req.param();
   const session = await sessionService.createSession({
     menteeId: Number(id),
@@ -26,9 +26,20 @@ menteeApp.post("/:id/session", async (c) => {
     endTime: new Date(endTime),
     length,
     status: "accepted",
+    bookingId,
   });
 
   return c.json(session, 201);
+});
+
+// INTERNAL
+menteeApp.patch("/:id/session/:bookingId", async (c) => {
+  const { bookingId } = c.req.param();
+  const { status } = await c.req.json();
+  const deletedSession = await sessionService.updateSession(Number(bookingId), {
+    status,
+  });
+  return c.json(deletedSession, 200);
 });
 
 menteeApp.get("/:id/session", async (c) => {

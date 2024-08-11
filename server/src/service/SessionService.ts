@@ -6,6 +6,10 @@ class SessionService {
     return sessionRepo.create(session);
   }
 
+  public async updateSession(bookingId: number, updatedFields: object) {
+    return sessionRepo.updateSession(bookingId, updatedFields);
+  }
+
   public async getMenteeSessions(menteeId: number) {
     return sessionRepo.getMenteeSessions(menteeId);
   }

@@ -148,4 +148,30 @@ describe("/mentee", () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual(expectedResp);
   });
+
+  test("PATCH /mentee/:id/session/:bookingId (Change status)", async () => {
+    // Create Session
+    const menteeId = mockMentee.mentee.id;
+    const bodyData = {
+      startTime: "2024-05-24T09:07:30.800Z",
+      endTime: "2024-05-24T09:07:45.800Z",
+      length: 45,
+      bookingId: 123, // In webhook, provider will supply the bookingId
+    };
+    const createResp = await app.request(`/mentee/${menteeId}/session`, {
+      method: "POST",
+      body: JSON.stringify(bodyData),
+    });
+    expect(createResp.status).toBe(201);
+
+    // Cancel the created session
+    const updateResp = await app.request(`/mentee/${menteeId}/session/123`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "cancelled" }),
+    });
+    expect(updateResp.status).toBe(200);
+    const jsonResp = await updateResp.json();
+    expect(jsonResp.bookingId).toBe(123);
+    expect(jsonResp.status).toBe("cancelled");
+  });
 });
