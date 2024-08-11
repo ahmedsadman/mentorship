@@ -27,6 +27,7 @@ export type WebhookPayload = {
     startTime: string;
     endTime: string;
     length: number;
+    bookingId: number;
   };
 };
 
@@ -55,7 +56,9 @@ class MenteeService extends UserService {
   }
 
   public async handleWebhookSession(payload: WebhookPayload) {
-    const { email } = payload.payload.attendees[0];
+    const { length, startTime, endTime, bookingId, attendees } =
+      payload.payload;
+    const { email } = attendees[0];
     const { mentee } = await this.getByEmail(email);
 
     if (!mentee) {
@@ -64,9 +67,10 @@ class MenteeService extends UserService {
 
     await this.createSession({
       menteeId: mentee.id,
-      length: payload.payload.length,
-      startTime: new Date(payload.payload.startTime),
-      endTime: new Date(payload.payload.endTime),
+      length,
+      startTime: new Date(startTime),
+      endTime: new Date(endTime),
+      bookingId,
       // For some reason, could not do DB migration of enums to change default to 'accepted'
       // Getting error, 'unsafe use of new enum value "accepted"'
       // Could be related to Drizzle-specific issue. Should investigate (low priority)
