@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, test } from "bun:test";
 import { db } from "@app/db";
-import { mentee } from "@app/db/schemas/mentee";
-import { session } from "@app/db/schemas/session";
-import { user } from "@app/db/schemas/user";
+import { mentee as menteeSchema } from "@app/db/schemas/mentee";
+import { session as sessionSchema } from "@app/db/schemas/session";
+import { user as userSchema } from "@app/db/schemas/user";
 import app from "@app/index";
 import menteeService, {
   type MenteeCreateResponse,
 } from "@app/service/MenteeService";
+import type { WebhookPayload } from "@app/service/MenteeService";
 import { eq } from "drizzle-orm";
 
 describe("/webhook", () => {
@@ -31,8 +32,9 @@ describe("/webhook", () => {
     });
   });
 
-  const createPayload = (email: string, overrides = {}) => ({
+  const createPayload = (email: string, overrides = {}): WebhookPayload => ({
     triggerEvent: "BOOKING_CREATED",
+    createdAt: "2024-05-19T07:43:51.464Z",
     payload: {
       startTime: "2024-06-19T07:43:51.464Z",
       endTime: "2024-06-19T07:50:51.464Z",
@@ -40,6 +42,9 @@ describe("/webhook", () => {
       attendees: [
         {
           email,
+          name: "Test",
+          utcOffset: 0,
+          timezone: "UTC",
         },
       ],
       bookingId: null,
@@ -47,54 +52,63 @@ describe("/webhook", () => {
     },
   });
 
-  test("/POST session", async () => {
-    const bodyData1 = createPayload(mockMentee1.user.email, { bookingId: 1 });
-    const bodyData2 = createPayload(mockMentee2.user.email, { bookingId: 2 });
+  describe("POST /webhook/session", () => {
+    type DBResult = {
+      // TODO: Unify types in a single place
+      session: typeof sessionSchema.$inferSelect | null;
+      user: typeof userSchema.$inferSelect | null;
+      mentee: typeof menteeSchema.$inferSelect | null;
+    };
 
     const makeDBQuery = (email: string) =>
       db
         .select()
-        .from(session)
-        .leftJoin(mentee, eq(session.menteeId, mentee.id))
-        .leftJoin(user, eq(mentee.userId, user.id))
-        .where(eq(user.email, email));
+        .from(sessionSchema)
+        .leftJoin(menteeSchema, eq(sessionSchema.menteeId, menteeSchema.id))
+        .leftJoin(userSchema, eq(menteeSchema.userId, userSchema.id))
+        .where(eq(userSchema.email, email));
 
-    const res = await app.request("/webhook/session", {
-      method: "POST",
-      body: JSON.stringify(bodyData1),
+    const assertSessionData = (
+      dbResult: DBResult,
+      bodyData: WebhookPayload,
+      mockMentee: { user: { email: string } },
+    ) => {
+      if (!dbResult.session) {
+        throw new Error("Session not found");
+      }
+      expect(dbResult).not.toBeEmpty();
+      expect(dbResult.session.bookingId).toEqual(bodyData.payload.bookingId);
+      expect(dbResult.session.startTime).toEqual(
+        new Date(bodyData.payload.startTime),
+      );
+      expect(dbResult.session.endTime).toEqual(
+        new Date(bodyData.payload.endTime),
+      );
+      expect(dbResult.session.length).toEqual(45);
+      expect(dbResult.user?.email).toEqual(mockMentee.user.email);
+    };
+
+    test("Separate webhook sessions are handled properly", async () => {
+      const bodyData1 = createPayload(mockMentee1.user.email, { bookingId: 1 });
+      const bodyData2 = createPayload(mockMentee2.user.email, { bookingId: 2 });
+
+      const res = await app.request("/webhook/session", {
+        method: "POST",
+        body: JSON.stringify(bodyData1),
+      });
+
+      expect(res.status).toBe(200);
+      const dbResult = await makeDBQuery(mockMentee1.user.email);
+      assertSessionData(dbResult[0], bodyData1, mockMentee1);
+
+      const res2 = await app.request("/webhook/session", {
+        method: "POST",
+        body: JSON.stringify(bodyData2),
+      });
+
+      expect(res2.status).toBe(200);
+      const dbResult2 = await makeDBQuery(mockMentee2.user.email);
+      assertSessionData(dbResult2[0], bodyData2, mockMentee2);
     });
-
-    expect(res.status).toBe(200);
-    const dbResult = await makeDBQuery(mockMentee1.user.email);
-
-    expect(dbResult[0]).not.toBeEmpty();
-    expect(dbResult[0].session.bookingId).toEqual(bodyData1.payload.bookingId);
-    expect(dbResult[0].session.startTime).toEqual(
-      new Date(bodyData1.payload.startTime),
-    );
-    expect(dbResult[0].session.endTime).toEqual(
-      new Date(bodyData1.payload.endTime),
-    );
-    expect(dbResult[0].session.length).toEqual(45);
-    expect(dbResult[0].user?.email).toEqual(mockMentee1.user.email);
-
-    const res2 = await app.request("/webhook/session", {
-      method: "POST",
-      body: JSON.stringify(bodyData2),
-    });
-
-    expect(res2.status).toBe(200);
-    const dbResult2 = await makeDBQuery(mockMentee2.user.email);
-
-    expect(dbResult2[0]).not.toBeEmpty();
-    expect(dbResult2[0].session.bookingId).toEqual(bodyData2.payload.bookingId);
-    expect(dbResult2[0].session.startTime).toEqual(
-      new Date(bodyData1.payload.startTime),
-    );
-    expect(dbResult2[0].session.endTime).toEqual(
-      new Date(bodyData1.payload.endTime),
-    );
-    expect(dbResult2[0].session.length).toEqual(45);
-    expect(dbResult2[0].user?.email).toEqual(mockMentee2.user.email);
   });
 });
