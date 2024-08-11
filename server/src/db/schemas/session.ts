@@ -11,6 +11,7 @@ export const statusEnum = pgEnum("status", ["accepted", "cancelled"]);
 
 export const session = pgTable("session", {
   id: serial("id").primaryKey(),
+  bookingId: integer("booking_id"),
   menteeId: integer("user_id").references(() => mentee.id),
   startTime: timestamp("start_time").notNull(),
   endTime: timestamp("end_time").notNull(),
