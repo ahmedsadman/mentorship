@@ -31,7 +31,7 @@ describe("/webhook", () => {
     });
   });
 
-  const createPayload = (email: string) => ({
+  const createPayload = (email: string, overrides = {}) => ({
     triggerEvent: "BOOKING_CREATED",
     payload: {
       startTime: "2024-06-19T07:43:51.464Z",
@@ -42,12 +42,14 @@ describe("/webhook", () => {
           email,
         },
       ],
+      bookingId: null,
+      ...overrides,
     },
   });
 
   test("/POST session", async () => {
-    const bodyData1 = createPayload(mockMentee1.user.email);
-    const bodyData2 = createPayload(mockMentee2.user.email);
+    const bodyData1 = createPayload(mockMentee1.user.email, { bookingId: 1 });
+    const bodyData2 = createPayload(mockMentee2.user.email, { bookingId: 2 });
 
     const makeDBQuery = (email: string) =>
       db
@@ -66,6 +68,7 @@ describe("/webhook", () => {
     const dbResult = await makeDBQuery(mockMentee1.user.email);
 
     expect(dbResult[0]).not.toBeEmpty();
+    expect(dbResult[0].session.bookingId).toEqual(bodyData1.payload.bookingId);
     expect(dbResult[0].session.startTime).toEqual(
       new Date(bodyData1.payload.startTime),
     );
@@ -84,6 +87,7 @@ describe("/webhook", () => {
     const dbResult2 = await makeDBQuery(mockMentee2.user.email);
 
     expect(dbResult2[0]).not.toBeEmpty();
+    expect(dbResult2[0].session.bookingId).toEqual(bodyData2.payload.bookingId);
     expect(dbResult2[0].session.startTime).toEqual(
       new Date(bodyData1.payload.startTime),
     );

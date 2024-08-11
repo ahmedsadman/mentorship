@@ -5,19 +5,26 @@ import { eq } from "drizzle-orm";
 
 class SessionRepo {
   public async create(session: NewSession) {
-    const { id, menteeId, startTime, endTime, length, status } = sessionTable;
-    const result = await db
-      .insert(sessionTable)
-      .values(session)
-      .returning({ id, menteeId, startTime, endTime, length, status });
+    const { id, bookingId, menteeId, startTime, endTime, length, status } =
+      sessionTable;
+    const result = await db.insert(sessionTable).values(session).returning({
+      id,
+      bookingId,
+      menteeId,
+      startTime,
+      endTime,
+      length,
+      status,
+    });
     return result[0];
   }
 
   public async getMenteeSessions(_menteeId: number) {
     // TODO: Extract the public fields as class attribute
-    const { id, menteeId, startTime, endTime, length, status } = sessionTable;
+    const { id, bookingId, menteeId, startTime, endTime, length, status } =
+      sessionTable;
     const result = await db
-      .select({ id, menteeId, startTime, endTime, length, status })
+      .select({ id, menteeId, bookingId, startTime, endTime, length, status })
       .from(sessionTable)
       .where(eq(sessionTable.menteeId, _menteeId));
     return result;

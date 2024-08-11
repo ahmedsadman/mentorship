@@ -98,6 +98,7 @@ describe("/mentee", () => {
       endTime: bodyData.endTime,
       length: 45,
       status: "accepted",
+      bookingId: null,
     };
 
     expect(res.status).toBe(201);
@@ -125,6 +126,7 @@ describe("/mentee", () => {
         startTime: new Date(data.startTime),
         endTime: new Date(data.endTime),
         status: "accepted",
+        bookingId: 1,
       }),
     );
 
@@ -136,6 +138,7 @@ describe("/mentee", () => {
       endTime: session.endTime.toISOString(),
       length: session.length,
       status: "accepted",
+      bookingId: 1,
     }));
 
     const res = await app.request(`/mentee/${menteeId}/session`, {
