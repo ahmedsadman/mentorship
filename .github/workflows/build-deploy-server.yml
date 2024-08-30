@@ -41,3 +41,9 @@ jobs:
     steps:
       - name: Trigger Deploy
         run: curl ${{ secrets.DEPLOY_WEBHOOK }}
+
+      - name: Wait
+        run: sleep 30
+
+      - name: Healthcheck
+        run: curl --max-time 60 ${{ secrets.HEALTHCHECK_URL }}
