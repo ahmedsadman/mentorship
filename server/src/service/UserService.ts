@@ -1,5 +1,5 @@
-import type { NewUser } from "@app/db/types";
 import UserRepo from "@app/repo/UserRepo";
+import type { NewUser } from "@app/types";
 
 export class UserService {
   public async createUser(user: NewUser) {

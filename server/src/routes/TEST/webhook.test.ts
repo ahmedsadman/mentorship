@@ -7,7 +7,7 @@ import app from "@app/index";
 import menteeService, {
   type MenteeCreateResponse,
 } from "@app/service/MenteeService";
-import type { WebhookPayload } from "@app/service/MenteeService";
+import type { WebhookPayload } from "@app/types";
 import { WebhookTrigger } from "@app/types";
 import { eq } from "drizzle-orm";
 
@@ -58,7 +58,6 @@ describe("/webhook", () => {
 
   describe("POST /webhook/session", () => {
     type DBResult = {
-      // TODO: Unify types in a single place
       session: typeof sessionSchema.$inferSelect | null;
       user: typeof userSchema.$inferSelect | null;
       mentee: typeof menteeSchema.$inferSelect | null;
