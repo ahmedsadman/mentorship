@@ -1,5 +1,5 @@
-import type { QueryUser } from "@app/db/types";
 import menteeRepo from "@app/repo/MenteeRepo";
+import type { QueryUser, WebhookPayload } from "@app/types";
 import {
   type NewMentee,
   type NewSession,
@@ -15,26 +15,6 @@ export type MenteeCreateResponse = {
   // TODO: Fetch public fields from class
   user: Pick<QueryUser, "id" | "name" | "email" | "createdAt">;
   mentee: Pick<QueryMentee, "id" | "plan" | "price" | "active">;
-};
-
-// TODO: Find a suitable spot to place such types
-type Attendee = {
-  email: string;
-  name: string;
-  timezone: string;
-  utcOffset: number;
-};
-
-export type WebhookPayload = {
-  triggerEvent: string;
-  createdAt: string;
-  payload: {
-    attendees: Attendee[];
-    startTime: string;
-    endTime: string;
-    length: number;
-    bookingId: number | null;
-  };
 };
 
 class MenteeService extends UserService {
