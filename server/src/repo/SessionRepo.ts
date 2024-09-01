@@ -50,7 +50,9 @@ class SessionRepo {
     }
 
     if (_endDate) {
-      whereClauses.push(lte(sessionTable.startTime, new Date(_endDate)));
+      whereClauses.push(
+        lte(sessionTable.startTime, new Date(`${_endDate}T23:59:59`)),
+      );
     }
 
     const result = await db

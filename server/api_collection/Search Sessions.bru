@@ -4,18 +4,14 @@ meta {
   seq: 5
 }
 
-post {
-  url: {{baseURL}}/mentee
+get {
+  url: {{baseURL}}/mentee/session/search?email=test@gmail.com&startDate=2024-08-19&endDate=2024-08-26
   body: json
   auth: none
 }
 
-body:json {
-  {
-    "name": "test mentee",
-    "email": "gmail11@email.com",
-    "password": "test123",
-    "plan": "pro",
-    "price": 250
-  }
+query {
+  email: test@gmail.com
+  startDate: 2024-08-19
+  endDate: 2024-08-26
 }
