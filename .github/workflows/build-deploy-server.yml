@@ -43,7 +43,7 @@ jobs:
         run: curl ${{ secrets.DEPLOY_WEBHOOK }}
 
       - name: Wait
-        run: sleep 30
+        run: sleep 60
 
       - name: Healthcheck
         run: curl --max-time 60 ${{ secrets.HEALTHCHECK_URL }}
