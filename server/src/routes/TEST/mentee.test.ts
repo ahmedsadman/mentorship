@@ -242,7 +242,7 @@ describe("/mentee", () => {
 
     test("Date filter works as expected", async () => {
       const resp = await app.request(
-        `/mentee/session/search?email=${mockMentee.user.email}&startDate=2024-06-01&endDate=2024-06-30`,
+        `/mentee/session/search?email=${mockMentee.user.email}&startDate=2024-06-01&endDate=2024-06-24`,
       );
       expect(resp.status).toBe(200);
       const jsonResp = await resp.json();
