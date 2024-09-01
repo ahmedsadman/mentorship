@@ -43,6 +43,13 @@
       "when": 1723387227204,
       "tag": "0005_black_ultragirl",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1725215804589,
+      "tag": "0006_fixed_madrox",
+      "breakpoints": true
     }
   ]
 }
