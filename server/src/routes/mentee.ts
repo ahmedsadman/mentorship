@@ -48,4 +48,10 @@ menteeApp.get("/:id/session", async (c) => {
   return c.json(sessions, 200);
 });
 
+menteeApp.get("/session/search", async (c) => {
+  const { email } = c.req.query();
+  const result = await sessionService.searchSession({ email });
+  return c.json(result, 200);
+});
+
 export default menteeApp;
