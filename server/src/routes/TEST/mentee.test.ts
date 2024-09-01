@@ -182,55 +182,73 @@ describe("/mentee", () => {
     expect(jsonResp.status).toBe("cancelled");
   });
 
-  test("GET /session/search", async () => {
+  describe("GET /session/search", async () => {
     // create the sessions
     // TODO: Add a better way to create session through direct function calls
-    const menteeId = mockMentee.mentee.id;
-    const menteeId2 = mockMentee2.mentee.id;
+    let menteeId: number;
+    let menteeId2: number;
 
-    const bodyData = [
-      {
-        menteeId,
-        startTime: "2024-05-24T09:07:30.800Z",
-        endTime: "2024-05-24T09:07:45.800Z",
-      },
-      {
-        menteeId,
-        startTime: "2024-08-24T09:07:30.800Z",
-        endTime: "2024-08-24T09:07:45.800Z",
-      },
-      {
-        menteeId,
-        startTime: "2024-10-24T09:07:30.800Z",
-        endTime: "2024-10-24T09:07:45.800Z",
-      },
-      {
-        menteeId: menteeId2,
-        startTime: "2024-06-24T09:07:30.800Z",
-        endTime: "2024-06-24T09:07:45.800Z",
-      },
-    ];
+    beforeEach(async () => {
+      menteeId = mockMentee.mentee.id;
+      menteeId2 = mockMentee2.mentee.id;
 
-    const promises = bodyData.map((data, index) =>
-      sessionService.createSession({
-        menteeId: data.menteeId,
-        length: 30,
-        startTime: new Date(data.startTime),
-        endTime: new Date(data.endTime),
-        status: "accepted",
-        bookingId: index,
-      }),
-    );
+      const bodyData = [
+        {
+          menteeId,
+          startTime: "2024-05-24T09:07:30.800Z",
+          endTime: "2024-05-24T09:07:45.800Z",
+        },
+        {
+          menteeId,
+          startTime: "2024-06-05T09:07:30.800Z",
+          endTime: "2024-06-05T09:07:45.800Z",
+        },
+        {
+          menteeId,
+          startTime: "2024-06-24T09:07:30.800Z",
+          endTime: "2024-06-24T09:07:45.800Z",
+        },
+        {
+          menteeId: menteeId2,
+          startTime: "2024-06-03T09:07:30.800Z",
+          endTime: "2024-06-03T09:07:45.800Z",
+        },
+      ];
 
-    await Promise.all(promises);
+      const promises = bodyData.map((data, index) =>
+        sessionService.createSession({
+          menteeId: data.menteeId,
+          length: 30,
+          startTime: new Date(data.startTime),
+          endTime: new Date(data.endTime),
+          status: "accepted",
+          bookingId: index,
+        }),
+      );
 
-    const resp = await app.request(
-      `/mentee/session/search?email=${mockMentee.user.email}`,
-    );
-    expect(resp.status).toBe(200);
-    const jsonResp = await resp.json();
+      await Promise.all(promises);
+    });
 
-    expect(jsonResp.mentee.userId).toEqual(mockMentee.user.id);
-    expect(jsonResp.sessionCount).toEqual(3);
+    test("Search by email works as expected", async () => {
+      const resp = await app.request(
+        `/mentee/session/search?email=${mockMentee.user.email}`,
+      );
+      expect(resp.status).toBe(200);
+      const jsonResp = await resp.json();
+
+      expect(jsonResp.mentee.userId).toEqual(mockMentee.user.id);
+      expect(jsonResp.sessionCount).toEqual(3);
+    });
+
+    test("Date filter works as expected", async () => {
+      const resp = await app.request(
+        `/mentee/session/search?email=${mockMentee.user.email}&startDate=2024-06-01&endDate=2024-06-30`,
+      );
+      expect(resp.status).toBe(200);
+      const jsonResp = await resp.json();
+
+      expect(jsonResp.mentee.userId).toEqual(mockMentee.user.id);
+      expect(jsonResp.sessionCount).toEqual(2);
+    });
   });
 });

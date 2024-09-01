@@ -1,7 +1,7 @@
 import { db } from "@app/db";
 import { session as sessionTable } from "@app/db/schemas/session";
 import type { NewSession } from "@app/types";
-import { eq, gte } from "drizzle-orm";
+import { and, eq, gte, lte } from "drizzle-orm";
 
 class SessionRepo {
   public async create(session: NewSession) {
@@ -33,29 +33,30 @@ class SessionRepo {
   }
 
   public async getMenteeSessions(
-    _menteeId: number | undefined = undefined,
-    _startDate: Date | undefined = undefined,
-    _endDate: Date | undefined = undefined,
+    _menteeId?: number | undefined,
+    _startDate?: string | undefined,
+    _endDate?: string | undefined,
   ) {
     const { id, bookingId, menteeId, startTime, endTime, length, status } =
       sessionTable;
-    const query = db
-      .select({ id, menteeId, bookingId, startTime, endTime, length, status })
-      .from(sessionTable);
+    const whereClauses = [];
 
     if (_menteeId) {
-      query.where(eq(sessionTable.menteeId, _menteeId));
+      whereClauses.push(eq(sessionTable.menteeId, _menteeId));
     }
 
     if (_startDate) {
-      query.where(gte(sessionTable.startTime, _startDate));
+      whereClauses.push(gte(sessionTable.startTime, new Date(_startDate)));
     }
 
     if (_endDate) {
-      query.where(gte(sessionTable.endTime, _endDate));
+      whereClauses.push(lte(sessionTable.startTime, new Date(_endDate)));
     }
 
-    const result = await query;
+    const result = await db
+      .select({ id, menteeId, bookingId, startTime, endTime, length, status })
+      .from(sessionTable)
+      .where(and(...whereClauses));
     return result;
   }
 }

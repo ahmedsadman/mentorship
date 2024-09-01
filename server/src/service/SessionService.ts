@@ -4,8 +4,8 @@ import type { NewSession } from "@app/types";
 
 export type SearchPayload = {
   email: string;
-  startTime?: string | undefined;
-  endTime?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 };
 
 class SessionService {
@@ -17,17 +17,26 @@ class SessionService {
     return sessionRepo.updateSession(bookingId, updatedFields);
   }
 
-  public async getMenteeSessions(menteeId: number) {
-    return sessionRepo.getMenteeSessions(menteeId);
+  public async getMenteeSessions(
+    menteeId: number,
+    startDate?: string,
+    endDate?: string,
+  ) {
+    return sessionRepo.getMenteeSessions(menteeId, startDate, endDate);
   }
 
   public async searchSession(payload: SearchPayload) {
-    const mentee = await menteeRepo.getByEmail(payload.email);
+    const { email, startDate, endDate } = payload;
+    const mentee = await menteeRepo.getByEmail(email);
     if (!mentee.mentee) {
       throw new Error("Mentee with given email not found");
     }
 
-    const sessions = await this.getMenteeSessions(mentee.mentee.id);
+    const sessions = await this.getMenteeSessions(
+      mentee.mentee.id,
+      startDate,
+      endDate,
+    );
     return {
       mentee: mentee.mentee,
       sessionCount: sessions.length,
