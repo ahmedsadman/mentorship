@@ -49,8 +49,12 @@ menteeApp.get("/:id/session", async (c) => {
 });
 
 menteeApp.get("/session/search", async (c) => {
-  const { email } = c.req.query();
-  const result = await sessionService.searchSession({ email });
+  const { email, startDate, endDate } = c.req.query();
+  const result = await sessionService.searchSession({
+    email,
+    startDate,
+    endDate,
+  });
   return c.json(result, 200);
 });
 
