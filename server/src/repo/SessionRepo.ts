@@ -1,7 +1,7 @@
 import { db } from "@app/db";
 import { session as sessionTable } from "@app/db/schemas/session";
 import type { NewSession } from "@app/types";
-import { eq } from "drizzle-orm";
+import { eq, gte } from "drizzle-orm";
 
 class SessionRepo {
   public async create(session: NewSession) {
@@ -32,14 +32,30 @@ class SessionRepo {
     return updatedSession[0];
   }
 
-  public async getMenteeSessions(_menteeId: number) {
-    // TODO: Extract the public fields as class attribute
+  public async getMenteeSessions(
+    _menteeId: number | undefined = undefined,
+    _startDate: Date | undefined = undefined,
+    _endDate: Date | undefined = undefined,
+  ) {
     const { id, bookingId, menteeId, startTime, endTime, length, status } =
       sessionTable;
-    const result = await db
+    const query = db
       .select({ id, menteeId, bookingId, startTime, endTime, length, status })
-      .from(sessionTable)
-      .where(eq(sessionTable.menteeId, _menteeId));
+      .from(sessionTable);
+
+    if (_menteeId) {
+      query.where(eq(sessionTable.menteeId, _menteeId));
+    }
+
+    if (_startDate) {
+      query.where(gte(sessionTable.startTime, _startDate));
+    }
+
+    if (_endDate) {
+      query.where(gte(sessionTable.endTime, _endDate));
+    }
+
+    const result = await query;
     return result;
   }
 }

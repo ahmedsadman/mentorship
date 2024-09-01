@@ -12,14 +12,21 @@ import { eq } from "drizzle-orm";
 
 describe("/mentee", () => {
   let mockMentee: MenteeCreateResponse;
+  let mockMentee2: MenteeCreateResponse;
 
   beforeEach(async () => {
     mockMentee = await menteeService.createMentee({
       name: "Test",
       email: "test@email.com",
-      password: "123",
       plan: "lite",
       price: 100,
+    });
+
+    mockMentee2 = await menteeService.createMentee({
+      name: "Test2",
+      email: "test2@email.com",
+      plan: "standard",
+      price: 240,
     });
   });
 
@@ -173,5 +180,57 @@ describe("/mentee", () => {
     const jsonResp = await updateResp.json();
     expect(jsonResp.bookingId).toBe(123);
     expect(jsonResp.status).toBe("cancelled");
+  });
+
+  test("GET /session/search", async () => {
+    // create the sessions
+    // TODO: Add a better way to create session through direct function calls
+    const menteeId = mockMentee.mentee.id;
+    const menteeId2 = mockMentee2.mentee.id;
+
+    const bodyData = [
+      {
+        menteeId,
+        startTime: "2024-05-24T09:07:30.800Z",
+        endTime: "2024-05-24T09:07:45.800Z",
+      },
+      {
+        menteeId,
+        startTime: "2024-08-24T09:07:30.800Z",
+        endTime: "2024-08-24T09:07:45.800Z",
+      },
+      {
+        menteeId,
+        startTime: "2024-10-24T09:07:30.800Z",
+        endTime: "2024-10-24T09:07:45.800Z",
+      },
+      {
+        menteeId: menteeId2,
+        startTime: "2024-06-24T09:07:30.800Z",
+        endTime: "2024-06-24T09:07:45.800Z",
+      },
+    ];
+
+    const promises = bodyData.map((data, index) =>
+      sessionService.createSession({
+        menteeId: data.menteeId,
+        length: 30,
+        startTime: new Date(data.startTime),
+        endTime: new Date(data.endTime),
+        status: "accepted",
+        bookingId: index,
+      }),
+    );
+
+    await Promise.all(promises);
+
+    const resp = await app.request(
+      `/mentee/session/search?email=${mockMentee.user.email}`,
+    );
+    expect(resp.status).toBe(200);
+    const jsonResp = await resp.json();
+
+    expect(jsonResp.mentee.userId).toEqual(mockMentee.user.id);
+    expect(jsonResp.sessionCount).toEqual(3);
   });
 });
