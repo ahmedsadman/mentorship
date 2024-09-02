@@ -238,6 +238,7 @@ describe("/mentee", () => {
 
       expect(jsonResp.mentee.userId).toEqual(mockMentee.user.id);
       expect(jsonResp.sessionCount).toEqual(3);
+      expect(jsonResp.sessions[0].startTime).toEqual("2024-05-24 03:07 PM");
     });
 
     test("Date filter works as expected", async () => {

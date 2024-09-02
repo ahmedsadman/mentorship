@@ -1,11 +1,20 @@
 import menteeRepo from "@app/repo/MenteeRepo";
 import sessionRepo from "@app/repo/SessionRepo";
-import type { NewSession } from "@app/types";
+import type { NewSession, QuerySession } from "@app/types";
+import { convertTimzeone } from "@app/utils";
 
 export type SearchPayload = {
   email: string;
   startDate?: string | undefined;
   endDate?: string | undefined;
+};
+
+type FormattedSession = Omit<
+  QuerySession,
+  "createdAt" | "updatedAt" | "startTime" | "endTime"
+> & {
+  startTime: string;
+  endTime: string;
 };
 
 class SessionService {
@@ -25,6 +34,24 @@ class SessionService {
     return sessionRepo.getMenteeSessions(menteeId, startDate, endDate);
   }
 
+  private formatSessions(
+    sessions: Omit<QuerySession, "createdAt" | "updatedAt">[],
+  ) {
+    const zone = "Asia/Dhaka";
+    const formattedSessions: FormattedSession[] = [];
+
+    for (const session of sessions) {
+      const { startTime, endTime, ...rest } = session;
+      const formattedSession: FormattedSession = {
+        startTime: convertTimzeone(startTime, zone),
+        endTime: convertTimzeone(endTime, zone),
+        ...rest,
+      };
+      formattedSessions.push(formattedSession);
+    }
+    return formattedSessions;
+  }
+
   public async searchSession(payload: SearchPayload) {
     const { email, startDate, endDate } = payload;
     const mentee = await menteeRepo.getByEmail(email);
@@ -37,10 +64,12 @@ class SessionService {
       startDate,
       endDate,
     );
+    const formattedSessions: FormattedSession[] = this.formatSessions(sessions);
+
     return {
       mentee: mentee.mentee,
       sessionCount: sessions.length,
-      sessions,
+      sessions: formattedSessions,
     };
   }
 }
